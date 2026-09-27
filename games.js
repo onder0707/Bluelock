@@ -1,114 +1,98 @@
+// Oyun ve Unblocker Veri Tabanı
 const games = [
     {
         title: "Eaglercraft 1.8 (Minecraft)",
         category: "pc",
-        image: "https://eaglercraft.com/favicon.png",
-        url: "https://eaglercraft.ru/"
+        image: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=500&q=80",
+        url: "https://eaglercraft.com/mc/1.8.8/"
     },
     {
-        title: "Stick War: Legacy",
-        category: "pc",
-        image: "https://play-lh.googleusercontent.com/9mEylj8o3OebW3A_0N043_CgE1gY8qN7Y1I6o6N5g9n9XG9b",
-        url: "https://stickwarlegacy.io/"
-    },
-    {
-        title: "Drive Mad",
-        category: "speed",
-        image: "https://drivemad.io/upload/cache/upload/imgs/drive-mad-m200x200.png",
-        url: "https://drivemad.io/"
-    },
-    {
-        title: "Slope 3D",
-        category: "speed",
-        image: "https://slopegame.io/upload/cache/upload/imgs/slope-game-m200x200.png",
-        url: "https://slopegame.io/"
-    },
-    {
-        title: "Moto X3M",
-        category: "speed",
-        image: "https://motox3m.co/upload/cache/upload/imgs/moto-x3m-m200x200.png",
-        url: "https://motox3m.co/"
-    },
-    {
-        title: "Vex 7",
-        category: "action",
-        image: "https://vex7.io/upload/cache/upload/imgs/vex-7-m200x200.png",
-        url: "https://vex7.io/"
-    },
-    {
-        title: "Rooftop Snipers",
-        category: "multi",
-        image: "https://rooftopsnipers.io/upload/cache/upload/imgs/rooftop-snipers-m200x200.png",
-        url: "https://rooftopsnipers.io/"
-    },
-    {
-        title: "Getaway Shootout",
-        category: "multi",
-        image: "https://getawayshootout.com/upload/cache/upload/imgs/getaway-shootout-m200x200.png",
-        url: "https://getawayshootout.com/"
+        title: "Google Proxied Web",
+        category: "unblocker",
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&q=80",
+        url: "https://www.bing.com"
     }
 ];
 
-function loadGames(category = 'all') {
-    const container = document.getElementById('gamesContainer');
-    container.innerHTML = '';
+// Sayfa Yüklendiğinde
+document.addEventListener("DOMContentLoaded", () => {
+    loadGames(games);
+});
 
-    const filtered = category === 'all' ? games : games.filter(g => g.category === category);
+// Oyunları Ekrana Yazdırma
+function loadGames(items) {
+    const grid = document.getElementById("gamesGrid");
+    grid.innerHTML = "";
 
-    filtered.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
+    if (items.length === 0) {
+        grid.innerHTML = "<p style='color: #a0aec0; grid-column: 1/-1;'>Bu kategoride henüz yayınlanmış içerik bulunmuyor. Yakında eklenecektir!</p>";
+        return;
+    }
+
+    items.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "game-card";
         card.onclick = () => openGame(game.title, game.url);
+
         card.innerHTML = `
-            <img src="${game.image}" class="game-thumb" alt="${game.title}" onerror="this.src='https://via.placeholder.com/150/1e293b/00f0ff?text=Bluelock'">
+            <img src="${game.image}" alt="${game.title}" onerror="this.src='https://via.placeholder.com/300x180?text=Gorsel+Yok'">
             <div class="game-info">
-                <div class="game-title">${game.title}</div>
+                <h3>${game.title}</h3>
             </div>
         `;
-        container.appendChild(card);
+        grid.appendChild(card);
     });
 }
 
+// Kategori Filtreleme
 function filterCategory(cat) {
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    loadGames(cat);
+
+    if (cat === 'all') {
+        loadGames(games);
+    } else {
+        const filtered = games.filter(g => g.category === cat);
+        loadGames(filtered);
+    }
 }
 
+// Oyun / Unblocker Açma
 function openGame(title, url) {
-    document.getElementById('modalGameTitle').innerText = title;
-    document.getElementById('gameFrame').src = url;
-    document.getElementById('gameModal').style.display = 'flex';
+    document.getElementById("modalTitle").innerText = title;
+    document.getElementById("gameIframe").src = url;
+    document.getElementById("gameModal").style.display = "flex";
 }
 
-function closeGameModal() {
-    document.getElementById('gameModal').style.display = 'none';
-    document.getElementById('gameFrame').src = '';
+// Modal Kapatma
+function closeGame() {
+    document.getElementById("gameModal").style.display = "none";
+    document.getElementById("gameIframe").src = "";
 }
 
-function launchProxy() {
-    let url = document.getElementById('proxyUrl').value.trim();
-    if (url) openGame('Unblocked Web', url.startsWith('http') ? url : 'https://' + url);
+// Özel URL Açma Barı
+function openCustomUrl() {
+    let url = document.getElementById("customUrl").value.trim();
+    if (!url) return;
+    
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        url = "https://" + url;
+    }
+    openGame("Özel Bağlantı", url);
 }
 
-function launchHeroProxy() {
-    let url = document.getElementById('heroProxyUrl').value.trim();
-    if (url) openGame('Unblocked Web', url.startsWith('http') ? url : 'https://' + url);
+// Tam Ekran
+function toggleFullscreen() {
+    const iframe = document.getElementById("gameIframe");
+    if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+    } else if (iframe.webkitRequestFullscreen) {
+        iframe.webkitRequestFullscreen();
+    }
 }
 
-function triggerPanic() {
-    document.getElementById('panic-screen').classList.toggle('panic-hidden');
+// Panik Butonu
+function panic() {
+    window.location.href = "https://eba.gov.tr";
 }
-
-function toggleCloak() {
-    document.title = "EBA - Eğitim Bilişim Ağı";
-    document.getElementById('tab-icon').href = "https://www.eba.gov.tr/favicon.ico";
-    alert("Sekme kılıfı EBA olarak değiştirildi!");
-}
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') triggerPanic();
-});
-
-window.onload = () => loadGames('all');
-      
+    
