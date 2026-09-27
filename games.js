@@ -1,89 +1,57 @@
-// Oyun ve Unblocker Veri Tabanı
 const games = [
     {
-        title: "Eaglercraft 1.8 (Minecraft)",
-        category: "pc",
-        image: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?w=500&q=80",
-        url: "https://eaglercraft.com/mc/1.8.8/"
-    },
-    {
-        title: "Google Proxied Web",
-        category: "unblocker",
-        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&q=80",
-        url: "https://www.bing.com"
+        title: "Ateş ve Su 7",
+        category: "twoplayer",
+        image: "https://img.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e-512x512.jpeg",
+        url: "https://html5.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e/?gd_sdk_referrer_url=https://bluelock.vercel.app"
     }
 ];
 
-// Sayfa Yüklendiğinde
-document.addEventListener("DOMContentLoaded", () => {
-    loadGames(games);
-});
+function loadGames(category = 'all') {
+    const container = document.getElementById('gamesContainer');
+    container.innerHTML = '';
 
-// Oyunları Ekrana Yazdırma
-function loadGames(items) {
-    const grid = document.getElementById("gamesGrid");
-    grid.innerHTML = "";
+    const filtered = category === 'all' ? games : games.filter(g => g.category === category);
 
-    if (items.length === 0) {
-        grid.innerHTML = "<p style='color: #a0aec0; grid-column: 1/-1;'>Bu kategoride henüz yayınlanmış içerik bulunmuyor. Yakında eklenecektir!</p>";
+    if (filtered.length === 0) {
+        container.innerHTML = '<p style="color: #94a3b8; grid-column: 1/-1;">Bu kategoride henüz oyun bulunmuyor.</p>';
         return;
     }
 
-    items.forEach(game => {
-        const card = document.createElement("div");
-        card.className = "game-card";
+    filtered.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
         card.onclick = () => openGame(game.title, game.url);
-
         card.innerHTML = `
-            <img src="${game.image}" alt="${game.title}" onerror="this.src='https://via.placeholder.com/300x180?text=Gorsel+Yok'">
+            <img src="${game.image}" class="game-thumb" alt="${game.title}" onerror="this.src='https://via.placeholder.com/300x180/1e293b/00f0ff?text=Gorsel+Yok'">
             <div class="game-info">
-                <h3>${game.title}</h3>
+                <div class="game-title">${game.title}</div>
             </div>
         `;
-        grid.appendChild(card);
+        container.appendChild(card);
     });
 }
 
-// Kategori Filtreleme
-function filterCategory(cat) {
-    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-
-    if (cat === 'all') {
-        loadGames(games);
-    } else {
-        const filtered = games.filter(g => g.category === cat);
-        loadGames(filtered);
-    }
+function filterCategory(cat, e) {
+    if (e) e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    if (e && e.currentTarget) e.currentTarget.classList.add('active');
+    loadGames(cat);
 }
 
-// Oyun / Unblocker Açma
 function openGame(title, url) {
-    document.getElementById("modalTitle").innerText = title;
-    document.getElementById("gameIframe").src = url;
-    document.getElementById("gameModal").style.display = "flex";
+    document.getElementById('modalGameTitle').innerText = title;
+    document.getElementById('gameFrame').src = url;
+    document.getElementById('gameModal').style.display = 'flex';
 }
 
-// Modal Kapatma
-function closeGame() {
-    document.getElementById("gameModal").style.display = "none";
-    document.getElementById("gameIframe").src = "";
+function closeGameModal() {
+    document.getElementById('gameModal').style.display = 'none';
+    document.getElementById('gameFrame').src = '';
 }
 
-// Özel URL Açma Barı
-function openCustomUrl() {
-    let url = document.getElementById("customUrl").value.trim();
-    if (!url) return;
-    
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-        url = "https://" + url;
-    }
-    openGame("Özel Bağlantı", url);
-}
-
-// Tam Ekran
 function toggleFullscreen() {
-    const iframe = document.getElementById("gameIframe");
+    const iframe = document.getElementById('gameFrame');
     if (iframe.requestFullscreen) {
         iframe.requestFullscreen();
     } else if (iframe.webkitRequestFullscreen) {
@@ -91,8 +59,18 @@ function toggleFullscreen() {
     }
 }
 
-// Panik Butonu
-function panic() {
-    window.location.href = "https://eba.gov.tr";
+function triggerPanic() {
+    document.getElementById('panic-screen').classList.toggle('panic-hidden');
 }
-    
+
+function toggleCloak() {
+    document.title = "EBA - Eğitim Bilişim Ağı";
+    document.getElementById('tab-icon').href = "https://www.eba.gov.tr/favicon.ico";
+    alert("Sekme kılıfı EBA olarak değiştirildi!");
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') triggerPanic();
+});
+
+window.onload = () => loadGames('all');
