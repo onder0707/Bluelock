@@ -2,8 +2,8 @@ const games = [
     {
         title: "Ateş ve Su 7",
         category: "twoplayer",
-        image: "https://img.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e-512x512.jpeg",
-        url: "https://html5.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e/?gd_sdk_referrer_url=https://bluelock.vercel.app"
+        image: "Bbd0f2ca61ed7b36c0b2f27b8e419406.jpg",
+        url: "https://html5.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e/?gd_sdk_referrer_url=https://bluelock-tan.vercel.app"
     }
 ];
 
@@ -74,3 +74,4 @@ document.addEventListener('keydown', (e) => {
 });
 
 window.onload = () => loadGames('all');
+                            
