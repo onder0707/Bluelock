@@ -1,9 +1,26 @@
 const games = [
     {
-        title: "Ateş ve Su 7",
+        title: "Ateş ve Su 1",
         category: "twoplayer",
-        image: "Bbd0f2ca61ed7b36c0b2f27b8e419406.jpg",
-        url: "https://html5.gamedistribution.com/d4a3629101574bc39bd8f9d1888ca58e/?gd_sdk_referrer_url=https://bluelock-tan.vercel.app"
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&q=80",
+        url: "https://html5.gamedistribution.com/rvvASAh3Rzp0DqmG/"
+    },
+    {
+        title: "Ateş ve Su (Alternatif Sunucu)",
+        category: "twoplayer",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&q=80",
+        url: "https://www.mathsisfun.com/games/fireboy-watergirl-forest-temple.html"
+    }
+];
+
+// Eğer GameDistribution genel olarak Vercel'i engelliyorsa, 
+// Doğrudan iframe uyumlu GitHub Pages / Unblocked sunucusunu kullanabiliriz:
+const unblockedGames = [
+    {
+        title: "Ateş ve Su",
+        category: "twoplayer",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&q=80",
+        url: "https://azgames.io/fireboy-and-watergirl-1.embed"
     }
 ];
 
@@ -23,7 +40,7 @@ function loadGames(category = 'all') {
         card.className = 'game-card';
         card.onclick = () => openGame(game.title, game.url);
         card.innerHTML = `
-            <img src="${game.image}" class="game-thumb" alt="${game.title}" onerror="this.src='https://via.placeholder.com/300x180/1e293b/00f0ff?text=Gorsel+Yok'">
+            <img src="${game.image}" class="game-thumb" alt="${game.title}">
             <div class="game-info">
                 <div class="game-title">${game.title}</div>
             </div>
@@ -74,4 +91,3 @@ document.addEventListener('keydown', (e) => {
 });
 
 window.onload = () => loadGames('all');
-                            
